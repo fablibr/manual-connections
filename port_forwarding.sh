@@ -125,6 +125,8 @@ Payload   ${GREEN}$payload${NC}
 --> The port is ${GREEN}$port${NC} and it will expire on ${RED}$expires_at${NC}. <--
 
 Trying to bind the port... "
+echo $port > /opt/piavpn-manual/pf_port
+systemctl start transmission-daemon
 
 # Now we have all required data to create a request to bind the port.
 # We will repeat this request every 15 minutes, in order to keep the port
@@ -143,6 +145,7 @@ while true; do
     # This script will exit in 2 months, since the port will expire.
     export bind_port_response
     if [ "$(echo "$bind_port_response" | jq -r '.status')" != "OK" ]; then
+      systemctl stop transmission-daemon
       echo -e "${RED}The API did not return OK when trying to bind port... Exiting."
       exit 1
     fi

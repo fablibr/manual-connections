@@ -151,7 +151,7 @@ if [[ $selectedRegion == "none" ]]; then
     echo Port Forwarding is enabled, non-PF servers excluded.
     echo
     summarized_region_data="$( echo $all_region_data |
-      jq -r '.regions[] | select(.port_forward==true) |
+      jq -r '.regions[] | select(.port_forward==true) | select(.name=="France" | not) |
       .servers.meta[0].ip+" "+.id+" "+.name+" "+(.geo|tostring)' )"
   else
     summarized_region_data="$( echo $all_region_data |
